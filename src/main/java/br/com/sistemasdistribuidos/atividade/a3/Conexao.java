@@ -27,7 +27,6 @@ public class Conexao implements Runnable {
             saida.println("Digite o seu nickname: ");
             nickname = entrada.readLine();
             System.out.println(nickname + " conectado!");
-            //TODO: Verificar como inserir método broadcast da classe ServerTCP
             server.broadcast(nickname + " entrou no chat!");
             String msg;
             while ((msg = entrada.readLine()) != null) {
@@ -40,11 +39,11 @@ public class Conexao implements Runnable {
                     } else {
                         saida.println("Nenhum nickname fornecido!");
                     }
-                } else if (msg.startsWith("/quit")) {
+                } else if (msg.equals("#QUIT")) {
                     server.broadcast(nickname + " saiu do chat.");
+                    System.out.println(nickname + " desconectado!");
                     desligarConexao();
                 } else {
-                    //TODO: Verificar como inserir método broadcast da classe ServerTCP
                     server.broadcast(msg);
                 }
             }
@@ -67,6 +66,10 @@ public class Conexao implements Runnable {
         if (!cliente.isClosed()) {
             cliente.close();
         }
+    }
+
+    public Socket getCliente() {
+        return cliente;
     }
     
 }

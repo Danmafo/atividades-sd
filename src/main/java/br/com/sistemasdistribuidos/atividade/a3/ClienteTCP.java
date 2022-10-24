@@ -36,7 +36,7 @@ public class ClienteTCP implements Runnable {
     }
 
     public void quit() {
-        funcionando = true;
+        this.funcionando = true;
         try {
             entrada.close();
             saida.close();

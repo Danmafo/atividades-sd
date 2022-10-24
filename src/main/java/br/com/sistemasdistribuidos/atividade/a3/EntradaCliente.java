@@ -18,7 +18,7 @@ public class EntradaCliente implements Runnable {
             BufferedReader leitorDeEntrada = new BufferedReader(new InputStreamReader(System.in));
             while (!cliente.isFuncionando()) {
                 String msg = leitorDeEntrada.readLine();
-                if (msg.equals("/quit")) {
+                if (msg == "#QUIT") {
                     leitorDeEntrada.close();
                     cliente.quit();
                 } else {
