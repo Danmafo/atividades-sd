@@ -12,25 +12,30 @@ public class ServerTCP implements Runnable {
 
     int porta = 8081;
 
-    private List<Conexao> conexoes = new ArrayList<>();
+    private List<Conexao> conexoes;
     private ServerSocket server;
-    private boolean funcionando = true;
+    private boolean funcionando;
     private ExecutorService threads;
+
+    public ServerTCP() {
+        conexoes = new ArrayList<>();
+        funcionando = false;
+    }
 
     @Override
     public void run() {
         try {
-            server = new ServerSocket(porta);
+            server = new ServerSocket(9999);
             threads = Executors.newCachedThreadPool();
             System.out.println("* SERVIDOR CONECTADO *");
-            while (funcionando) {
+            while (!funcionando) {
                 Socket cliente = server.accept();
                 Conexao conexao = new Conexao(cliente, this);
                 conexoes.add(conexao);
                 threads.execute(conexao);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            quit();
         }
     }
 
@@ -42,19 +47,21 @@ public class ServerTCP implements Runnable {
         }
     }
 
-    public void quit() throws IOException {
-        funcionando = false;
-        if (!server.isClosed()) {
-            server.close();
-        }
-        for (Conexao c : conexoes) {
-            c.quit();
-        }
+    public void quit() {
+        funcionando = true;
+        try {
+            if (!server.isClosed()) {
+                server.close();
+            }
+            for (Conexao c : conexoes) {
+                c.desligarConexao();
+            }
+        } catch (IOException e) { }
     }
-
+    
     public static void main(String[] args) {
         ServerTCP server = new ServerTCP();
         server.run();
     }
-    
+
 }
