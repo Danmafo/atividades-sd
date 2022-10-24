@@ -16,8 +16,10 @@ public class ServerTCP implements Runnable {
     private ServerSocket server;
     private boolean funcionando;
     private ExecutorService threads;
+    private List<String> logados;
 
     public ServerTCP() {
+        logados = new ArrayList<>();
         conexoes = new ArrayList<>();
         funcionando = false;
     }
@@ -39,6 +41,14 @@ public class ServerTCP implements Runnable {
         }
     }
 
+    public void listarLogados() {
+        for (Conexao c : conexoes) {
+            if (c != null) {
+                c.listarConectados();
+            }
+        }
+    } 
+
     public void broadcast(String msg) {
         for (Conexao c : conexoes) {
             if (c != null) {
@@ -59,6 +69,10 @@ public class ServerTCP implements Runnable {
         } catch (IOException e) { }
     }
     
+    public List<String> getLogados() {
+        return logados;
+    }
+
     public static void main(String[] args) {
         ServerTCP server = new ServerTCP();
         server.run();

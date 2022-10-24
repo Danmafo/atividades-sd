@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 
 public class Conexao implements Runnable {
 
@@ -25,23 +26,19 @@ public class Conexao implements Runnable {
             entrada = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
             saida = new PrintWriter(cliente.getOutputStream(), true);
             saida.println("Digite o seu nickname: ");
-            nickname = entrada.readLine();
+            this.nickname = entrada.readLine();
+            server.getLogados().add(nickname);
+            System.out.println("NICK INSIDE CONN = " + nickname);
             System.out.println(nickname + " conectado!");
             server.broadcast(nickname + " entrou no chat!");
             String msg;
             while ((msg = entrada.readLine()) != null) {
-                if (msg.startsWith("/nickname")) {
-                    String[] msgSplit = msg.split(" ", 2);
-                    if (msgSplit.length == 2) {
-                        server.broadcast(nickname + " mudou seu nickname para " + msgSplit[1]);
-                        nickname = msgSplit[1];
-                        saida.println("Nickname trocado com sucesso!");
-                    } else {
-                        saida.println("Nenhum nickname fornecido!");
-                    }
+                if (msg.equals("#USERS")) {
+                    server.listarLogados();
                 } else if (msg.equals("#QUIT")) {
                     server.broadcast(nickname + " saiu do chat.");
                     System.out.println(nickname + " desconectado!");
+                    server.getLogados().remove(nickname);
                     desligarConexao();
                 } else {
                     server.broadcast(msg);
@@ -56,6 +53,16 @@ public class Conexao implements Runnable {
         }
     }
 
+    public void listarConectados() {
+        List<String> logados = server.getLogados();
+        for (String nick : logados) {
+            if (!nick.equals(this.nickname)) {
+                saida.println(nick);
+            }
+        }   
+    }
+
+
     public void enviarMensagem(String msg) {
         saida.println(msg);   
     }
@@ -67,9 +74,13 @@ public class Conexao implements Runnable {
             cliente.close();
         }
     }
+    
+    public PrintWriter getSaida() {
+        return saida;
+    }
 
-    public Socket getCliente() {
-        return cliente;
+    public String getNickname() {
+        return this.nickname;
     }
     
 }
