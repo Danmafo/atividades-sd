@@ -18,7 +18,7 @@ public class ClienteTCP implements Runnable {
     @Override
     public void run() {
         try {
-            cliente = new Socket("localhost", 9999);
+            cliente = new Socket("localhost", porta);
             saida = new PrintWriter(cliente.getOutputStream(), true);
             entrada = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
 

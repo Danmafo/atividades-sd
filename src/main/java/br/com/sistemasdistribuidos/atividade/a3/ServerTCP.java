@@ -27,7 +27,7 @@ public class ServerTCP implements Runnable {
     @Override
     public void run() {
         try {
-            server = new ServerSocket(9999);
+            server = new ServerSocket(porta);
             threads = Executors.newCachedThreadPool();
             System.out.println("* SERVIDOR CONECTADO *");
             while (!funcionando) {
