@@ -23,7 +23,7 @@ public class ServerUDP {
 
             String msgFinal;
             Operacoes operacao;
-            String sinal = mensagem.replaceAll("\\d+", "").trim(); // remove numeros e espaços em branco, deixando apenas o sinal da operacao
+            String sinal = mensagem.replaceAll("[^\\+\\-\\*\\/]", ""); // remove numeros e espaços em branco, deixando apenas o sinal da operacao
             valores = mensagem.split("[\\+\\-\\*\\/]");
             
             switch (sinal) {
