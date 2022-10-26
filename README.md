@@ -1,6 +1,246 @@
 # atividades-sd
 Atividades p/ 1° Avaliação do Curso de Sistemas Distribuídos
 
+## Atividade 1
+
+```java
+package br.com.sistemasdistribuidos.atividade.a1
+```
+
+### Geral
+
+<p>Este pacote apresenta uma calculadora baseada na arquitetura cliente/servidor, onde um processo recebe dados do usuário e outro que processa e devolve a resposta.</p>
+
+### Classe ServerUDP
+
+<p>Esta classe é responsável pelo processamento dos dados e envio da resposta para o cliente.</p>
+
+<p>O método main prepara o processo para o recebimento de requisições do usuário.</p>
+
+<p>Este trecho inicia o socket na porta 6789 e cria um buffer para o armazenamento dos dados.</p>
+
+```java
+    public static void main(String[] args) throws IOException {
+        String valores[];
+        String resultado = null;
+        String erro = "Erro";
+        DatagramSocket aSocket = null;
+        aSocket = new DatagramSocket(6789);
+        System.out.println("Servidor UDP iniciado");
+        byte[] buffer = new byte[1000];
+ ```
+ 
+ <p>O servidor deve aguardar por requisições enquanto estiver ligado. As mensagens devem estar no formato `<numero><sinal><numero>`. Para cada mensagem recebida é separado os valores e o sinal para realizar a operação.</p>
+ 
+ <p>Uma resposta é enviada de volta ao cliente no formato `O resultado da operação <numero> <sinal> <numero> = <resultado>´.</p>
+ 
+ ```java
+        while (true) {
+            DatagramPacket request = new DatagramPacket(buffer, buffer.length);
+            // bloqueia até receber a mensagem
+            aSocket.receive(request);
+            String mensagem = new String (request.getData(), 0, request.getLength());
+            System.out.println( "RECEIVE=" + mensagem);
+
+            String msgFinal;
+            Operacoes operacao;
+            String sinal = mensagem.replaceAll("[^\\+\\-\\*\\/]", ""); // remove numeros e espaços em branco, deixando apenas o sinal da operacao
+            valores = mensagem.split("[\\+\\-\\*\\/]");
+            
+            switch (sinal) {
+                case "+":
+                    operacao = new Operacoes(valores[0], valores[1]);
+                    resultado = String.valueOf(operacao.soma());
+                break;
+
+                case "-":
+                    operacao = new Operacoes(valores[0], valores[1]);
+                    resultado = String.valueOf(operacao.subtracao());
+                break;
+
+                case "*":
+                    operacao = new Operacoes(valores[0], valores[1]);
+                    resultado = String.valueOf(operacao.multiplicacao());
+                break;
+
+                case "/":
+                    operacao = new Operacoes(valores[0], valores[1]);
+                    resultado = String.valueOf(operacao.divisao());
+                break;
+
+                default:
+                    System.out.println(erro);
+            }
+            
+            msgFinal = "O resultado da operação " + mensagem + " = " + resultado;
+            System.out.println(msgFinal);
+            byte[] msg = msgFinal.getBytes();
+
+            // instancia o objeto para enviar a mensagem
+            DatagramPacket reply = new DatagramPacket(msg, 
+                    msg.length, request.getAddress(),
+                    request.getPort());
+            // envia a resposta ao cliente
+            aSocket.send(reply);
+        }
+```
+
+### Classe ClienteUDP
+
+<p>Atributos e construtor da classe</p>
+
+```java
+    private final String ENDERECO_SERVIDOR = "localhost";
+    private final int PORTA = 6789;
+    private DatagramSocket socket;
+    
+    /**
+     * Creates new form Cliente
+     */
+    public ClienteUDP() {
+        initComponents();
+        
+        try {
+            socket = new DatagramSocket();
+        } catch (SocketException e) {
+            JOptionPane.showMessageDialog(null, "Um erro impediu a inicialização da aplicação.");
+            System.exit(1);
+        }
+    }
+```
+
+<p>Este método é responsável por extrair os dados das caixas de texto, enviá-los ao servidor e exibir a resposta na interface gráfica, quando o usuário clicar no botão `Resolver`.</p>
+
+```java
+    private void btnResolverActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        String num1 = txtNum1.getText();
+        String num2 = txtNum2.getText();
+        String operacao = labelSinalOperacao.getText();
+        String resposta;
+        
+        enviarDados(num1 + " " + operacao + " " + num2);
+        resposta = aguardarResposta();
+        
+        labelResultado.setText(resposta);
+    }
+```
+
+<p>Este método altera a operação que será repassada ao servidor ao selecionar um item da lista de operações.</p>
+
+```java
+    private void comboOperacaoItemStateChanged(java.awt.event.ItemEvent evt) {                                               
+        int operacao = comboOperacao.getSelectedIndex();
+        
+        switch (operacao) {
+            case 0: labelSinalOperacao.setText("+"); break;
+            case 1: labelSinalOperacao.setText("-"); break;
+            case 2: labelSinalOperacao.setText("*"); break;
+            case 3: labelSinalOperacao.setText("/"); break;
+        }
+    }
+```
+
+<p>Aqui os dados são empacotados e enviados ao servidor.</p>
+
+```java
+    private void enviarDados(String dadosString) {
+        try {
+            byte[] dados = dadosString.getBytes();
+            DatagramPacket pacoteEnviado = new DatagramPacket(dados, dados.length, InetAddress.getByName(ENDERECO_SERVIDOR), PORTA);
+            socket.send(pacoteEnviado);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro: " + e.getMessage());
+        }
+    }
+```
+
+<p>Método que faz o cliente esperar por uma resposta do servidor. Caso o servidor não responda dentro de um segundo, um erro é disparado e o método retorna a mensagem "Servidor indisponível.". Isso previne que a aplicação pare aguardando uma resposta quando o servidor estiver desligado, por exemplo.</p>
+
+```java
+    private String aguardarResposta() {
+        String resposta;
+        DatagramPacket pacoteRecebido;
+        
+        try {
+            byte[] dados = new byte[1000];
+            pacoteRecebido = new DatagramPacket(dados, dados.length);
+            
+            // Servidor deve responder em até 1s
+            socket.setSoTimeout(1000);
+
+            socket.receive(pacoteRecebido);
+
+            resposta = new String(pacoteRecebido.getData(), 0, pacoteRecebido.getLength());
+        } catch (SocketTimeoutException timeout) {
+            resposta = "Servidor indisponível.";
+        } catch (IOException e) {
+            resposta = "Ocorreu um erro: " + e.getMessage();
+        }
+        
+        return resposta;
+    }
+```
+
+<p>Método gerado automaticamente pelo gerador de interface gráfica da IDE Apache NetBeans.</p>
+
+```java
+    private void initComponents() { ... }
+```
+
+### Classe Operacoes
+
+<p>Esta classe é responsável pela conversão de tipo dos dados e efetuação do cálculo matemático.</p>
+
+<p>Atributos e construtor da classe</p>
+
+```java
+    public float x;
+    public float y;
+
+    public Operacoes(String valor1, String valor2) {
+        this.x = Float.parseFloat(valor1);
+        this.y = Float.parseFloat(valor2);
+    }
+```
+
+<p>Soma os valores da operação.</p>
+
+```java
+    public float soma() {
+        return x + y;
+    }
+```
+
+<p>Subtrai os valores da operação.</p>
+
+```java
+    public float subtracao() {
+        return x - y;
+    }
+```
+
+<p>Multiplica os valores da operação.</p>
+
+```java
+    public float multiplicacao() {
+        return x * y;
+    }
+```
+
+<p>Divide os valores da operação.</p>
+
+```java
+    public float divisao() {
+        return x / y;
+    }
+```
+
+### Arquivo ClienteUDP.form
+
+<p>Este arquivo é gerado automaticamente pelo gerador de interface gráfica da IDE Apache NetBeans. Usado para gerenciar os componentes gráficos dentro da IDE.</p>
+
+** ** ** ** ** ** **
+
 ## Atividade 3
 
 ```java
