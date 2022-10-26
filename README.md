@@ -30,9 +30,9 @@ package br.com.sistemasdistribuidos.atividade.a1
         byte[] buffer = new byte[1000];
  ```
  
- <p>O servidor deve aguardar por requisições enquanto estiver ligado. As mensagens devem estar no formato `<numero><sinal><numero>`. Para cada mensagem recebida é separado os valores e o sinal para realizar a operação.</p>
+ <p>O servidor deve aguardar por requisições enquanto estiver ligado. As mensagens devem estar no formato <code>&lt;numero&gt;&lt;sinal&gt;&lt;numero&gt;</code>. Para cada mensagem recebida é separado os valores e o sinal para realizar a operação.</p>
  
- <p>Uma resposta é enviada de volta ao cliente no formato `O resultado da operação <numero> <sinal> <numero> = <resultado>´.</p>
+ <p>Uma resposta é enviada de volta ao cliente no formato <code>O resultado da operação &lt;numero&gt; &lt;sinal&gt; &lt;numero&gt; = &lt;resultado&gt;</code>.</p>
  
  ```java
         while (true) {
@@ -109,7 +109,7 @@ package br.com.sistemasdistribuidos.atividade.a1
     }
 ```
 
-<p>Este método é responsável por extrair os dados das caixas de texto, enviá-los ao servidor e exibir a resposta na interface gráfica, quando o usuário clicar no botão `Resolver`.</p>
+<p>Este método é responsável por extrair os dados das caixas de texto, enviá-los ao servidor e exibir a resposta na interface gráfica, quando o usuário clicar no botão <code>Resolver</code>.</p>
 
 ```java
     private void btnResolverActionPerformed(java.awt.event.ActionEvent evt) {                                            
