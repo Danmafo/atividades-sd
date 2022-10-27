@@ -239,7 +239,168 @@ package br.com.sistemasdistribuidos.atividade.a1
 
 <p>Este arquivo é gerado automaticamente pelo gerador de interface gráfica da IDE Apache NetBeans. Usado para gerenciar os componentes gráficos dentro da IDE.</p>
 
-** ** ** ** ** ** **
+## Atividade 2
+
+```java
+package br.com.sistemasdistribuidos.atividade.a2
+```
+
+## Geral
+<p>Neste pacote temos a 
+
+### Classe ServerRMI
+
+<p>Esta classe é responsável por deixar os métodos disponíveis para acesso remoto.</p>
+
+<p>O método main instancia um objeto remoto, cria um registro para os objetos recebidos e libera o acesso para outras máquinas.</p>
+
+```java
+    public static void main(String[] args) {
+        try {
+            VeiculoInterface classificados = new Classificados();
+            String acesso = "rmi://localhost/classificados";
+    
+            System.out.println("Registrando objeto no RMIRegistry...");
+            LocateRegistry.createRegistry(1099);
+            Naming.rebind(acesso, classificados);
+    
+            System.out.println("Aguardando clientes...");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+```
+
+### Classe Veiculo
+
+<p>Atributos e construtor da classe</p>
+
+```java
+    String nomeCliente;
+    String marcaVeiculo;
+    double valorVenda;
+    int ano;
+    
+    public Veiculo() { }
+
+    public Veiculo(String nomeCliente, String marcaVeiculo, double valorVenda, int ano) {
+        this.nomeCliente = nomeCliente;
+        this.marcaVeiculo = marcaVeiculo;
+        this.valorVenda = valorVenda;
+        this.ano = ano;
+    }
+```
+
+<p>Esta é a classe cujas instâncias serão transmitidas pela rede. A interface <code>Serializable</code> permite que os objetos sejam materializados e enviados.</p>
+
+```java
+public class Veiculo implements Serializable {
+```
+
+<p>Sobrescreve o método toString para exibir os dados na tela.</p>
+
+```java
+    @Override
+    public String toString() {
+        return "Nome do Cliente: " + this.nomeCliente + "\n"
+                + "Marca do Veículo: " + this.marcaVeiculo + "\n"
+                + "Valor de Venda: " + this.valorVenda + "\n"
+                + "Ano: " + this.ano;
+    }
+```
+
+### Classe VeiculoInterface
+
+<p>Permite o acesso aos métodos do objeto instanciado no servidor extendendo a classe <code>Remote</code>.</p>
+
+```java
+public interface VeiculoInterface extends Remote {
+```
+
+<p>Assinatura dos métodos.</p>
+
+```java
+    public List<Veiculo> search2Ano (int anoVeiculo) throws RemoteException;
+    public void add (Veiculo v) throws RemoteException;
+```
+
+### Classe Classificados
+
+<p>Atributos e construtor da classe</p>
+
+```java
+    List<Veiculo> veiculos = new ArrayList<>();
+
+    protected Classificados() throws RemoteException {
+        super();
+    }
+```
+
+<p>Retorna uma lista com todos os veículos armazenados.</p>
+
+```java
+    @Override
+    public List<Veiculo> search2Ano(int anoVeiculo) throws RemoteException {
+        List<Veiculo> procuradosPorAno = new ArrayList<>();
+        for (Veiculo veiculo : veiculos) {
+            if (veiculo.getAno() == anoVeiculo) {
+                procuradosPorAno.add(veiculo);
+            }
+        }
+        return procuradosPorAno;
+    }
+```
+
+<p>Adiciona um veículo à lista.</p>
+
+```java
+    @Override
+    public void add(Veiculo v) throws RemoteException {
+        veiculos.add(v);
+    }
+```
+
+### Classe ClienteRMI
+
+<p>Nesta classe é feito o acesso ao método remoto e a transferências de alguns objetos para o servidor.</p>
+
+<p>Neste trecho é realizado a busca pelo objeto remoto no servidor.</p>
+
+```java
+        String acesso = "rmi://localhost/classificados";
+        VeiculoInterface classificados = (VeiculoInterface) Naming.lookup(acesso);
+```
+
+<p>Aqui os objetos são criado e repassados ao servidor pela chamada ao método remoto <code>add()</code>.</p>
+
+```java
+        Veiculo veiculo1 = new Veiculo("Daniel Fonseca", "BMW", 120000.0, 2022);
+        Veiculo veiculo2 = new Veiculo("Taylor Henrique", "Jaguar", 190000.0, 2022);
+        Veiculo veiculo3 = new Veiculo("Marty McFly", "DMC", 100000.0, 1975);
+        Veiculo veiculo4 = new Veiculo("Vovô", "Chevrolet Chevette", 90000.0, 1975);
+
+        classificados.add(veiculo1);
+        classificados.add(veiculo2);
+        classificados.add(veiculo3);
+        classificados.add(veiculo4);
+```
+
+<p>Uma lista de veículos é obtida por meio da chamada do método <code>search2Ano()</code> e exibida na tela.</p>
+
+```java
+        List<Veiculo> veiculos2022 = classificados.search2Ano(2022);
+        List<Veiculo> veiculos1975 = classificados.search2Ano(1975);
+
+        System.out.println("== 2022 ==");
+        for (int i = 0; i < veiculos2022.size(); i++) {
+            System.out.println("\nVeículo " + (i + 1) + "\n" + veiculos2022.get(i) + "\n");
+        }
+
+        System.out.println("== 1975 ==");
+        for (int i = 0; i < veiculos1975.size(); i++) {
+            System.out.println("\nVeículo " + (i + 1) + "\n" + veiculos1975.get(i) + "\n");
+        }
+```
 
 ## Atividade 3
 
