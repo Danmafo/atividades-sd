@@ -28,7 +28,6 @@ public class Conexao implements Runnable {
             saida.println("Digite o seu nickname: ");
             this.nickname = entrada.readLine();
             server.getLogados().add(nickname);
-            System.out.println("NICK INSIDE CONN = " + nickname);
             System.out.println(nickname + " conectado!");
             server.broadcast(nickname + " entrou no chat!");
             String msg;
@@ -41,7 +40,7 @@ public class Conexao implements Runnable {
                     server.getLogados().remove(nickname);
                     desligarConexao();
                 } else {
-                    server.broadcast(msg);
+                    server.broadcast(nickname + "> " + msg);
                 }
             }
         } catch (IOException e) {
@@ -64,7 +63,7 @@ public class Conexao implements Runnable {
 
 
     public void enviarMensagem(String msg) {
-        saida.println(msg);   
+        saida.println(msg); 
     }
 
     public void desligarConexao() throws IOException {
