@@ -3,7 +3,7 @@ package br.com.sistemasdistribuidos.atividade.a2.clienteRMI;
 import java.rmi.Naming;
 import java.util.List;
 
-import br.com.sistemasdistribuidos.atividade.a2.interfaces.VeiculoInterface;
+import br.com.sistemasdistribuidos.atividade.a2.VeiculoInterface;
 import br.com.sistemasdistribuidos.atividade.a2.serverRMI.Veiculo;
 
 public class ClienteRMI {

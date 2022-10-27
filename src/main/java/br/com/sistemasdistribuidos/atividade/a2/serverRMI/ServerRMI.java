@@ -3,7 +3,7 @@ package br.com.sistemasdistribuidos.atividade.a2.serverRMI;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
-import br.com.sistemasdistribuidos.atividade.a2.interfaces.VeiculoInterface;
+import br.com.sistemasdistribuidos.atividade.a2.VeiculoInterface;
 
 public class ServerRMI {
     

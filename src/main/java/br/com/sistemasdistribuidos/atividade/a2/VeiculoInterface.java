@@ -1,4 +1,4 @@
-package br.com.sistemasdistribuidos.atividade.a2.interfaces;
+package br.com.sistemasdistribuidos.atividade.a2;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
