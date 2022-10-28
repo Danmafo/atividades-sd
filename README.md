@@ -1,6 +1,24 @@
 # atividades-sd
 Atividades p/ 1° Avaliação do Curso de Sistemas Distribuídos
 
+# Integrantes:
+<table>
+    <tr>
+        <td>Matrícula<td>
+        <td>Discente<td>
+    </tr>
+    <tr>
+        <td>20200795040<td>
+        <td>Daniel Marques Fonseca<td>
+    </tr>    
+    <tr>
+        <td>20200795602<td>
+        <td>Taylor Henrique Moraes de Souza<td>
+    </tr>    
+</table>
+
+<br>
+
 ## Atividade 1
 
 ```java
