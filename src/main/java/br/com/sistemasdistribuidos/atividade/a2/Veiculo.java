@@ -1,4 +1,4 @@
-package br.com.sistemasdistribuidos.atividade.a2.serverRMI;
+package br.com.sistemasdistribuidos.atividade.a2;
 
 import java.io.Serializable;
 

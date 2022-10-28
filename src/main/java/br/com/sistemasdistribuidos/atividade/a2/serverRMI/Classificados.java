@@ -5,6 +5,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.sistemasdistribuidos.atividade.a2.Veiculo;
 import br.com.sistemasdistribuidos.atividade.a2.VeiculoInterface;
 
 public class Classificados extends UnicastRemoteObject implements VeiculoInterface {
