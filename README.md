@@ -329,7 +329,7 @@ public class Veiculo implements Serializable {
 <p>Permite o acesso aos métodos do objeto instanciado no servidor extendendo a classe <code>Remote</code>.</p>
 
 ```java
-public interface VeiculoInterface extends Remote {
+public interface ClassificadosVeiculos extends Remote {
 ```
 
 <p>Assinatura dos métodos.</p>
