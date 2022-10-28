@@ -4,13 +4,13 @@ import java.rmi.Naming;
 import java.util.List;
 
 import br.com.sistemasdistribuidos.atividade.a2.Veiculo;
-import br.com.sistemasdistribuidos.atividade.a2.VeiculoInterface;
+import br.com.sistemasdistribuidos.atividade.a2.ClassificadosVeiculos;
 
 public class ClienteRMI {
 
     public static void main(String[] args) throws Exception {
         String acesso = "rmi://localhost/classificados";
-        VeiculoInterface classificados = (VeiculoInterface) Naming.lookup(acesso);
+        ClassificadosVeiculos classificados = (ClassificadosVeiculos) Naming.lookup(acesso);
         
         Veiculo veiculo1 = new Veiculo("Daniel Fonseca", "BMW", 120000.0, 2022);
         Veiculo veiculo2 = new Veiculo("Taylor Henrique", "Jaguar", 190000.0, 2022);

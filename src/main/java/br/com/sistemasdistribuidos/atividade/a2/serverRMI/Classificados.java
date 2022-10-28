@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.sistemasdistribuidos.atividade.a2.Veiculo;
-import br.com.sistemasdistribuidos.atividade.a2.VeiculoInterface;
+import br.com.sistemasdistribuidos.atividade.a2.ClassificadosVeiculos;
 
-public class Classificados extends UnicastRemoteObject implements VeiculoInterface {
+public class Classificados extends UnicastRemoteObject implements ClassificadosVeiculos {
 
     List<Veiculo> veiculos = new ArrayList<>();
 

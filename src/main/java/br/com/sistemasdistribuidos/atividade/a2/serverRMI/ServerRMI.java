@@ -3,13 +3,13 @@ package br.com.sistemasdistribuidos.atividade.a2.serverRMI;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
-import br.com.sistemasdistribuidos.atividade.a2.VeiculoInterface;
+import br.com.sistemasdistribuidos.atividade.a2.ClassificadosVeiculos;
 
 public class ServerRMI {
     
     public static void main(String[] args) {
         try {
-            VeiculoInterface classificados = new Classificados();
+            ClassificadosVeiculos classificados = new Classificados();
             String acesso = "rmi://localhost/classificados";
     
             System.out.println("Registrando objeto no RMIRegistry...");
