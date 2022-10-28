@@ -263,9 +263,6 @@ package br.com.sistemasdistribuidos.atividade.a1
 package br.com.sistemasdistribuidos.atividade.a2
 ```
 
-## Geral
-<p>Neste pacote temos a 
-
 ### Classe ServerRMI
 
 <p>Esta classe é responsável por deixar os métodos disponíveis para acesso remoto.</p>
